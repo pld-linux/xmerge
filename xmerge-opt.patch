@@ -1,0 +1,81 @@
+--- xmerge/hqp/Makefile.orig	2003-09-19 17:36:52.000000000 +0200
++++ xmerge/hqp/Makefile	2007-08-04 18:52:59.687365722 +0200
+@@ -1,7 +1,12 @@
+-CXX = g++ -ggdb  -O3 -c -I.
+-CC = gcc -ggdb  -O3 -c 
++XCXX = g++
++XCC = gcc
++CXXFLAGS = -ggdb -O3
++CFLAGS = -ggdb -O3
++LDFLAGS = -ggdb -O3
++CXX = $(XCXX) $(CXXFLAGS) -c -I.
++CC = $(XCC) $(CFLAGS) -c 
+ 
+-LD = g++ -ggdb -lc -lm -O3 
++LD = $(XCXX) $(LDFLAGS) -lm
+ 
+ SRCS =	Hqp_HL.C	\
+ 	Hqp_HL_BFGS.C	\
+--- xmerge/hqp/makedefs.orig	2003-09-18 16:08:26.000000000 +0200
++++ xmerge/hqp/makedefs	2007-08-04 18:54:47.094400911 +0200
+@@ -12,9 +12,9 @@ EXE_SUFFIX = 
+ 
+ .SUFFIXES: .c .C .f $(OBJ_SUFFIX) $(LIB_SUFFIX)
+ 
+-CC = gcc
++CC = $(XCC)
+ CFLAGS = -O2 -fPIC
+-CXX = c++
++CXX = $(XCXX)
+ CXXFLAGS = -O2 -fPIC
+ 
+ INSTALL_PREFIX = /usr
+@@ -26,16 +26,16 @@ VERSION = 1.8.2
+ #
+ # Meschach
+ #
+-MES_CC = gcc
+-MES_CFLAGS = -O2 -fPIC
++MES_CC = $(XCC)
++MES_CFLAGS = $(CFLAGS)
+ MES_DEFS = -DTRADITIONAL -DU_INT_DEF=1
+ 
+ #
+ # ADOL-C
+ #
+-ADOL_CC = c++
+-ADOL_MCC = gcc
+-ADOL_CFLAGS = -O2 -fPIC
++ADOL_CC = $(XCXX)
++ADOL_MCC = $(XCC)
++ADOL_CFLAGS = $(CFLAGS)
+ 
+ ADOLC_SRCS = $(ASRCS)
+ 
+@@ -100,6 +100,6 @@ ASCEND_SRCS = 
+ #
+ # Linker
+ #
+-LD = c++ -shared -o 
++LD = $(XCXX) -shared -o 
+ LDFLAGS_START = 
+ RANLIB = :
+--- xmerge/Makefile.orig	2003-09-21 13:20:27.000000000 +0200
++++ xmerge/Makefile	2007-08-04 18:42:59.836326518 +0200
+@@ -1,7 +1,13 @@
+-CXX = g++ -ggdb  -O3 -c -Ihqp
+-CC = gcc -O0 -ggdb -c -W -Wall -fomit-frame-pointer  -pipe -fno-strength-reduce  -D_GNU_SOURCE -I/usr/X11R6/include
++XCXX = g++
++XCC = gcc
++CXXFLAGS = -ggdb -O3
++CFLAGS = -O0 -ggdb -W -Wall -fomit-frame-pointer -pipe -fno-strength-reduce
++CPPFLAGS = -I/usr/X11R6/include
++LDFLAGS = -L/usr/X11R6/lib
++CXX = $(XCXX) $(CXXFLAGS) -c -Ihqp
++CC = $(XCC) -c -D_GNU_SOURCE $(CPPFLAGS)
+ #LD = gcc -O3 -ggdb -W -Wall -lm -lX11 -L/usr/X11R6/lib			
+-LD = g++ -O0 -ggdb -W -Wall -lm -lX11 -L/usr/X11R6/lib
++LD = $(XCXX) -lm -lX11 $(LDFLAGS)
+ 
+ 
+ 
