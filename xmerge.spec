@@ -7,7 +7,10 @@ License:	GPL v2+
 Group:		X11/Applications/Graphics
 Source0:	http://dl.sourceforge.net/xmerge/%{name}-%{version}.tar.gz
 # Source0-md5:	ffb929265d041f103b7d629d80ab184b
+Patch0:		%{name}-opt.patch
 URL:		http://xmerge.sourceforge.net
+BuildRequires:	libstdc++-devel
+BuildRequires:	rpmbuild(macros) >= 1.167
 BuildRequires:	xorg-lib-libX11-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -22,9 +25,15 @@ obrazów. Posiada interfejs graficzny.
 
 %prep
 %setup -q -n %{name}
+%patch0 -p1
 
 %build
-%{__make}
+%{__make} \
+	XCC="%{__cc}" \
+	XCXX="%{__cxx}" \
+	CFLAGS="%{rpmcflags}" \
+	CXXFLAGS="%{rpmcxxflags}" \
+	LDFLAGS="%{rpmldflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
